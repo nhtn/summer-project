@@ -1,0 +1,158 @@
+openapi: 3.0.0
+info:
+  title: Crowd Service API
+  description: This is the Customer Service API
+  version: 0.0.1
+paths:
+  /customers/{customerId}:
+    get:
+      summary: Get a customer by Id
+      parameters:
+        - in: path
+          name: customerId
+          schema:
+            type: string
+          required: true
+          description: Customer Id of the customer to get
+      responses:
+        '200':    
+          description: An JSON of the customer
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Customer'
+        '400':    
+          description: Bad Request
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ResponseBody'
+              example:
+                message: "MongooseServerSelectionError: error connect 127.0.0.1:27017"
+    delete:
+      summary: Delete an existing customer by Id
+      parameters:
+        - in: path
+          name: customerId
+          schema:
+            type: string
+          required: true
+          description: Customer Id of the customer to get
+      responses:
+        '200':    
+          description: An JSON of the customer
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ResponseBody'
+              example:
+                message: "Successfully deleted customer from records."
+        '400':    
+          description: Bad Request
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ResponseBody'
+              example:
+                message: "MongooseServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017"
+    put:
+      summary: Assign jobs to a specific provider
+      parameters:
+        - in: path
+          name: customerId
+          schema:
+            type: string
+          required: true
+          description: Customer Id of the provider to get
+      requestBody:
+        description: Customer Request
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerRequest'
+      responses:
+        '200':    
+          description: An JSON of the provider
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ResponseBody'
+              example:
+                message: "Successfully updated customer."
+        '400':    
+          description: Bad Request
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ResponseBody'
+              example:
+                message: "MongooseServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017"
+  /customers:
+    post:
+      summary: Returns the newly created customer
+      description: Create a new customer
+      requestBody:
+        description: Customer Request
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerRequest'
+      responses:
+        '200':    
+          description: A JSON newly created customer
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Customer'
+        '400':    
+          description: Bad Request
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ResponseBody'
+              example:
+                message: "MongooseServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017"
+components:
+  schemas:  
+    CustomerRequest:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        phoneNumber:
+          type: number
+        email:
+          type: string   
+      example:
+        firstName: "Peter333"
+        lastName: "Park"
+        phoneNumber: 123456789
+        email: "abc@gmail.com"    
+    Customer:
+      type: object
+      properties:
+        id: 
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        phoneNumber:
+          type: number
+        email:
+          type: string     
+      example:
+        id: "63d8b750a3c2d7ddbea466dc"
+        firstName: "Peter333"
+        lastName: "Park"
+        phoneNumber: 123456789
+        email: "abc@gmail.com"
+    ResponseBody:
+      type: object
+      properties:
+        message:
+          type: string

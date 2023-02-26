@@ -1,0 +1,473 @@
+openapi: 3.0.0
+info:
+  title: Provider Service API
+  description: This is the Provider Service API
+  version: 0.0.1
+paths:
+  /providers/{providerId}:
+    get:
+      summary: Get a provider by Id
+      parameters:
+        - in: path
+          name: providerId
+          schema:
+            type: string
+          required: true
+          description: Provider Id of the provider to get
+      responses:
+        '200':    
+          description: An JSON of the provider
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Provider'
+        '400':    
+          description: Bad Request
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ResponseBody'
+              example:
+                message: "MongooseServerSelectionError: error connect 127.0.0.1:27017"
+    delete:
+      summary: Delete an existing provider by Id
+      parameters:
+        - in: path
+          name: providerId
+          schema:
+            type: string
+          required: true
+          description: Provider Id of the provider to get
+      responses:
+        '200':    
+          description: An JSON of the provider
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ResponseBody'
+              example:
+                message: "Successfully deleted provider from records."
+        '400':    
+          description: Bad Request
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ResponseBody'
+              example:
+                message: "MongooseServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017"
+    post:
+      summary: Update an existing provider by Id
+      parameters:
+        - in: path
+          name: providerId
+          schema:
+            type: string
+          required: true
+          description: Provider Id of the provider to get
+      requestBody:
+        description: Provider Request
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProviderRequest'
+      responses:
+        '200':    
+          description: An JSON of the provider
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ResponseBody'
+              example:
+                message: "Successfully updated provider."
+        '400':    
+          description: Bad Request
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ResponseBody'
+              example:
+                message: "MongooseServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017"
+    put:
+      summary: Assign jobs to a specific provider
+      parameters:
+        - in: path
+          name: providerId
+          schema:
+            type: string
+          required: true
+          description: Provider Id of the provider to get
+      requestBody:
+        description: Provider Request
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateJobsToProviderRequest'
+            example:
+              jobIds: [ 1 ]
+      responses:
+        '200':    
+          description: An JSON of the provider
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ResponseBody'
+              example:
+                message: "Successfully updated provider."
+        '400':    
+          description: Bad Request
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ResponseBody'
+              example:
+                message: "MongooseServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017"
+  /providers:
+    post:
+      summary: Returns the newly created provider
+      description: Create a new provider
+      requestBody:
+        description: Provider Request
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProviderRequest'
+      responses:
+        '200':    
+          description: A JSON newly created provider
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Provider'
+        '400':    
+          description: Bad Request
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ResponseBody'
+              example:
+                message: "MongooseServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017"
+  /providers/search:
+    post:
+      summary: Returns a list of providers by region and job Id
+      description: Search all the providers within the same region and has the same JobId
+      requestBody:
+        description: Search Request
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchRequest'
+      responses:
+        '200':    
+          description: An array JSON of matching providers
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Provider'
+        '400':    
+          description: Bad Request
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ResponseBody'
+              example:
+                message: "MongooseServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017"
+  /providers/config/create:
+    post:
+      summary: Returns a newly created configuration for a specific job
+      description: Create a new job configuration
+      requestBody:
+        description: Provider Config Request
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProviderConfigRequest'
+            example:
+              jobId: 1
+              matchingAttributes:
+                - name: "location"
+                  operator: "gt"
+                  path: "location"
+                  value: "1000"
+                - name: "rating"
+                  operator: "gt"
+                  path: "rating"
+                  value: "4"
+      responses:
+        '200':    
+          description: A JSON newly created provider
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Provider'
+        '400':    
+          description: Bad Request
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ResponseBody'
+              example:
+                message: "MongooseServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017"
+  /providers/config/{jobId}:
+    get:
+      summary: Returns provider configuration by job Id
+      description: Get provider configuration by job Id
+      parameters:
+        - in: path
+          name: jobId
+          schema:
+            type: number
+          required: true
+          description: Job Id to get
+      responses:
+        '200':    
+          description: The provider configuration by Job Id
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ProviderConfigRequest'
+        '400':    
+          description: Bad Request
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ResponseBody'
+              example:
+                message: "MongooseServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017"
+    put:
+      summary: Update an existing provider configuration
+      parameters:
+        - in: path
+          name: jobId
+          schema:
+            type: number
+          required: true
+          description: Job Id to get
+      requestBody:
+        description: Provider Config Request
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProviderConfigRequest'
+            example:
+              jobId: 1
+              matchingAttributes:
+                - name: "location"
+                  operator: "gt"
+                  path: "location"
+                  value: "1000"
+                - name: "rating"
+                  operator: "gt"
+                  path: "rating"
+                  value: "4"
+      responses:
+        '200':    
+          description: A successful message 
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ResponseBody'
+              example:
+                message: "Successfully updated provider config"
+        '400':    
+          description: Bad Request
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ResponseBody'
+              example:
+                message: "MongooseServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017"
+components:
+  schemas:  
+    ProviderRequest:
+      type: object
+      properties:
+        providerCode:
+          type: string
+        providerName:
+          type: string
+        providerDescription:
+          type: string
+        companyName:
+          type: string
+        address:
+          $ref: '#/components/schemas/ProviderAddress'
+        business:
+          $ref: '#/components/schemas/Business'
+        jobIds:
+          type: string
+        rating:
+          type: string
+        location:
+          $ref: '#/components/schemas/Location'
+      example:
+        providerCode: "DEF"
+        providerName: "Provider North Hobart"
+        providerDescription: "Shipping and Delivery Provider"
+        companyName: "Company Name"
+        address: 
+            address: "412 Elizabeth St"
+            state: "Tasmania"
+            city: "Hobart"
+            suburb: "North Hobart"
+            postCode: 7005
+            country: "AU"
+        business: 
+            abnNumber: "51 824 753 556"
+            lineNumber: "0491 570 156"
+            documents: [ 1 ]
+        jobIds: [ 1 ]
+        rating: "5"
+        location: 
+          lat: -42.8750462
+          lng: 147.3174775        
+    Provider:
+      type: object
+      properties:
+        id:
+          type: string
+        providerCode:
+          type: string
+        providerName:
+          type: string
+        providerDescription:
+          type: string
+        companyName:
+          type: string
+        address:
+          $ref: '#/components/schemas/ProviderAddress'
+        business:
+          $ref: '#/components/schemas/Business'
+        jobIds:
+          type: string
+        rating:
+          type: string
+        location:
+          $ref: '#/components/schemas/Location'
+      example:
+        id: "63d8a17768cc9c8dfe2d1b11"
+        providerCode: "DEF"
+        providerName: "Provider North Hobart"
+        providerDescription: "Shipping and Delivery Provider"
+        companyName: "Company Name"
+        address: 
+            address: "412 Elizabeth St"
+            state: "Tasmania"
+            city: "Hobart"
+            suburb: "North Hobart"
+            postCode: 7005
+            country: "AU"
+        business: 
+            abnNumber: "51 824 753 556"
+            lineNumber: "0491 570 156"
+            documents: [ 1 ]
+        jobIds: [ 1 ]
+        rating: "5"
+        location: 
+          lat: -42.8750462
+          lng: 147.3174775
+    SearchRequest:
+      type: object
+      properties:
+        country:
+          type: string
+        jobId:
+          type: number
+      example:
+        country: "AU"     
+        jobId: 1 
+    Address:
+      type: object
+      properties:
+        street:
+          type: string
+        postcode:
+          type: number
+        country:
+          type: string
+    ProviderAddress:
+      type: object
+      properties:
+        address:
+          type: string
+        state:
+          type: string
+        city:
+          type: string
+        suburb:
+          type: string
+        postCode:
+          type: string
+        country:
+          type: string
+      example:
+        address: "412 Elizabeth St"
+        state: "Tasmania"
+        city: "Hobart"
+        suburb: "North Hobart"
+        postCode: 7005
+        country: "AU"
+    Location:
+      type: object
+      properties:
+        lat:
+          type: number
+        lng:
+          type: number
+      example:
+        lat: -42.8750462
+        lng: 147.3174775
+    Business:
+      type: object
+      properties:
+        abnNumber:
+          type: string
+        lineNumber:
+          type: string
+        documents:
+          type: array
+          items:
+            type: integer
+            format: int64
+      example:
+        abnNumber: "51 824 753 556t"
+        lineNumber: "0491 570 156"
+        documents: [ 1 ]
+    ResponseBody:
+      type: object
+      properties:
+        message:
+          type: string
+    ProviderConfigRequest:
+      type: object
+      properties:
+        jobId:
+          type: number
+        matchingAttributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/MatchingAttribute'
+    MatchingAttribute:
+      type: object
+      properties:
+        name:
+          type: string
+        operator:
+          type: string
+        path:
+          type: string
+        value:
+          type: string
+    UpdateJobsToProviderRequest:
+      type: object
+      properties:
+        jobIds:
+          type: array
+          items:
+            type: integer
+            format: int64

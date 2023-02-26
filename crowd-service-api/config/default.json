@@ -1,0 +1,11 @@
+{
+    "providers": {
+        "baseURL": "http://localhost:3000/providers"
+    },
+    "arcgis": {
+        "apiKey": "AAPK65c71819bad7482682beb8e7e688d19aIWG4NNM_VT8e_aNF9YHzOmJCsMIakJDJmwLEsvbgONRyrg0sjzBaDGd9VvHr0EON"
+    },
+    "mongoDb": {
+        "connection": "mongodb://localhost:27017"
+    }
+}

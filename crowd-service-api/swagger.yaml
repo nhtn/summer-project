@@ -1,0 +1,159 @@
+openapi: 3.0.0
+info:
+  title: Crowd Service API
+  description: This is the Crowd Service API
+  version: 0.0.1
+paths:
+  /crowd/booking:
+    post:
+      summary: Returns a list of matching providers
+      description: Find all the providers that matching the booking request
+      requestBody:
+        description: Booking Request
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookingRequest'
+      responses:
+        '200':    
+          description: A JSON array of matching providers
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Provider'
+        '500':    
+          description: Server response error
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ResponseBody'
+              example:
+                message: "RequestError: Error: connect ECONNREFUSED 127.0.0.1:3000"
+components:
+  schemas:
+    BookingRequest:
+      type: object
+      properties:
+        from:
+          $ref: '#/components/schemas/Address'
+        to:
+          $ref: '#/components/schemas/Address'
+        jobId:
+          type: number
+      example:
+        from:
+          street: "287 Churchill Avenue"
+          postcode: 7005
+          country: "AU"
+        to:
+          street: "8 Apsley St"
+          postcode: 7004
+          country: "AU"
+        jobId: 1
+    Address:
+      type: object
+      properties:
+        street:
+          type: string
+        postcode:
+          type: number
+        country:
+          type: string
+    Provider:
+      type: object
+      properties:
+        id:
+          type: string
+        providerCode:
+          type: string
+        providerName:
+          type: string
+        providerDescription:
+          type: string
+        companyName:
+          type: string
+        address:
+          $ref: '#/components/schemas/ProviderAddress'
+        business:
+          $ref: '#/components/schemas/Business'
+        jobIds:
+          type: string
+        rating:
+          type: string
+        location:
+          $ref: '#/components/schemas/Location'
+      example:
+        providerCode: "DEF"
+        providerName: "Provider North Hobart"
+        providerDescription: "Shipping and Delivery Provider"
+        companyName: "Company Name"
+        address: 
+            address: "412 Elizabeth St"
+            state: "Tasmania"
+            city: "Hobart"
+            suburb: "North Hobart"
+            postCode: 7005
+            country: "AU"
+        business: 
+            abnNumber: "51 824 753 556"
+            lineNumber: "0491 570 156"
+            documents: [ 1 ]
+        jobIds: [ 1 ]
+        rating: "5"
+        location: 
+          lat: -42.8750462
+          lng: 147.3174775
+    ProviderAddress:
+      type: object
+      properties:
+        address:
+          type: string
+        state:
+          type: string
+        city:
+          type: string
+        suburb:
+          type: string
+        postCode:
+          type: string
+        country:
+          type: string
+      example:
+        address: "412 Elizabeth St"
+        state: "Tasmania"
+        city: "Hobart"
+        suburb: "North Hobart"
+        postCode: 7005
+        country: "AU"
+    Location:
+      type: object
+      properties:
+        lat:
+          type: number
+        lng:
+          type: number
+      example:
+        lat: -42.8750462
+        lng: 147.3174775
+    Business:
+      type: object
+      properties:
+        abnNumber:
+          type: string
+        lineNumber:
+          type: string
+        documents:
+          type: array
+          items:
+            type: integer
+            format: int64
+      example:
+        abnNumber: "51 824 753 556t"
+        lineNumber: "0491 570 156"
+        documents: [ 1 ]
+    ResponseBody:
+      type: object
+      properties:
+        message:
+          type: string
